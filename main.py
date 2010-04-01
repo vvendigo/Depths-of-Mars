@@ -1,6 +1,7 @@
 #! /usr/bin/python
 import sys, pygame
 import core
+import data
 from level import Level
 
 pygame.mixer.pre_init(22050, -16, 2, 2048)
@@ -10,6 +11,8 @@ core.width = 640
 core.height = 480
 core.appName = "Pygame experiment"
 core.init()
+
+data.init()
 
 framerate = 40
 clock = pygame.time.Clock()

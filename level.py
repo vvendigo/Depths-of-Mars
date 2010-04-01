@@ -1,7 +1,7 @@
 import pygame
 import core
 import objects
-from misc import *
+import data
 import random
 
 tileSize = 40
@@ -17,10 +17,7 @@ class Wall:
     img = None
 
     def __init__(self):
-        imgPts = [(1,1),(tileSize,1),(tileSize,tileSize),(1,tileSize)]
-        for i in xrange(0,50):
-            imgPts.append((random.randint(1, tileSize), random.randint(1, tileSize)))
-        self.img = makeImg(imgPts)
+        self.img = data.tiles[4]
         self.rect = self.img.get_rect()
     #enddef
 

@@ -1,6 +1,7 @@
 import pygame
 import core
 from misc import *
+import data
 
 class BaseObj:
     img = None
@@ -23,7 +24,7 @@ class BaseObj:
 
 class Ball(BaseObj):
     def __init__(self, x, y, level):
-        self.img = makeImg([(0,0),(20,0),(20,20),(0,20)])
+        self.img = data.alien
         self.level = level
         mvlim = 2
         self.speed = [random.randint(-mvlim,mvlim), random.randint(-mvlim,mvlim)]
@@ -51,7 +52,7 @@ class Player(BaseObj):
     def __init__(self, x, y, controls, level):
         self.controls = controls
         self.level = level
-        self.img = makeImg([(9,0),(10,0),(20,20),(0,20)])
+        self.img = data.playerShip
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
         BaseObj.__init__(self, x, y)
@@ -83,7 +84,7 @@ class Player(BaseObj):
 
 class PlayerMissile(BaseObj):
     def __init__(self, x, y):
-        self.img = makeImg([(3,0),(6,6),(0,6)])
+        self.img = data.missile
         self.speed = [0, -1]
         self.energy = 10
         BaseObj.__init__(self, x-3, y)

@@ -1,0 +1,16 @@
+
+TODO:
+- proper shooting
+- status bar
+- player x level collisions
+- player x monster collisions
+- improve level class
+- scenario class/obj
+  - menu
+  - map of caves
+  - cave extermination dependent actions
+  - text info
+- animated sprites
+- paralax scrolling bg
+- sounds / sound class
+
