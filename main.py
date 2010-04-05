@@ -20,7 +20,7 @@ pygame.time.set_timer(pygame.USEREVENT+1, 1000/framerate)
 
 #snd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
 
-level = Level()
+level = Level(1)
 
 while not core.controls.quit:
 
@@ -38,3 +38,6 @@ while not core.controls.quit:
 
     clock.tick(framerate)
 #endwhile
+
+#pygame.image.save(core.screen, "shot.jpg")
+

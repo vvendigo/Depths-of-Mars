@@ -35,14 +35,14 @@ class Level:
     playerMissiles = []
     aliens = []
 
-    w = 0
+    width = 0
+    height = 0
     walls = []
 
-    def __init__(self):
-        self.load(0)
-        #self.players.append(objects.Player(core.controls, self))
-        for i in xrange(0,10):
-            self.aliens.append(objects.Ball((i*20)%core.width, 10*((i*20)/core.width), self))
+    def __init__(self, no = 0):
+        self.load(no)
+#        for i in xrange(0,10):
+#            self.aliens.append(objects.Ball((i*20)%core.width, 10*((i*20)/core.width), self))
     #enddef
 
     def load(self, no):
@@ -67,8 +67,11 @@ class Level:
                     wall.append(Empty())
             #endfor
             self.walls.append(wall)
+            self.height += tileSize
         #endfor
-        self.w = maxX * tileSize
+        self.width = maxX * tileSize
+        if not self.players:
+            self.players.append(objects.DummyPlayer(0, 0, self))
     #enddef
 
     def behave(self):
@@ -100,16 +103,18 @@ class Level:
         y = 0
         if self.players:
             plx, ply = self.players[0].getPos()
-            y = ply - core.height/2
-            x = plx - core.width/2
+            y = int(ply) - core.height/2
+            x = int(plx) - core.width/2
             if x < 0:
                 x = 0
-            if x > self.w - core.width:
-                x = self.w - core.width
+            if x > self.width - core.width:
+                x = self.width - core.width
             if y < 0:
                 y = 0
+            if y > self.height - core.height:
+                y = self.height - core.height
         else:
-            x = (self.w - core.width) / 2
+            x = (self.width - core.width) / 2
         #endif
 
         for ty, wall in enumerate(self.walls[y/tileSize:y/tileSize+core.height/tileSize+1]):

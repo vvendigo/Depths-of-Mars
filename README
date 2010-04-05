@@ -1,6 +1,4 @@
-
 TODO:
-- proper shooting
 - status bar
 - player x level collisions
 - player x monster collisions
@@ -16,4 +14,8 @@ TODO:
 - new alien classes
   - steam beam
   - alien breeder
+
+DONE:
+- proper shooting
+- some test sprites
 

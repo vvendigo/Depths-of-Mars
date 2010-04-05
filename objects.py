@@ -7,9 +7,12 @@ class BaseObj:
     img = None
     speed = [0,0]
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, pos='tl'):
         self.rect = self.img.get_rect()
-        self.rect.topleft = (x,y)
+        if pos =='c':
+            self.rect.center = (x,y)
+        else:
+            self.rect.topleft = (x,y)
     #enddef
 
     def draw(self, corrx, corry):
@@ -59,8 +62,8 @@ class Player(BaseObj):
     #enddef
 
     def fire(self):
-        self.reloadTime = pygame.time.get_ticks() + 400
-        self.level.playerMissiles.append(PlayerMissile(self.rect.centerx, self.rect.top))
+        self.reloadTime = pygame.time.get_ticks() + 700
+        self.level.playerMissiles.append(PlayerMissile(self.rect.centerx, self.rect.bottom))
         playStereo(self.shootSnd, self.rect.centerx)
     #enddef
 
@@ -85,9 +88,9 @@ class Player(BaseObj):
 class PlayerMissile(BaseObj):
     def __init__(self, x, y):
         self.img = data.missile
-        self.speed = [0, -1]
+        self.speed = [0, 6]
         self.energy = 10
-        BaseObj.__init__(self, x-3, y)
+        BaseObj.__init__(self, x, y, 'c')
     #enddef
 
     def hurt(self, armSpec):
@@ -96,13 +99,47 @@ class PlayerMissile(BaseObj):
     #enddef
 
     def behave(self):
-        if self.speed[1] > -5:
-            self.speed[1] *= 1.3
-        if self.rect.top < 0 or self.energy <= 0:
+        self.speed[1] *= 0.99
+        if self.speed[1] < 1 or self.energy <= 0:
             return False
         return BaseObj.behave(self)
     #enddef
 
 #endclass
 
+class DummyPlayer:
+    def __init__(self, x, y, level):
+        self.level = level
+        self.dx = 1
+        self.dy = 0.25
+        self.x = x
+        self.y = y
+    #enddef
+
+    def draw(self, corrx, corry):
+        pass
+    #enddef
+
+    def behave(self):
+        if self.dx > 0 and self.x > self.level.width-core.width/2:
+            self.dx = -1
+        if self.dx < 0 and self.x < core.width/2:
+            self.dx = +1
+        if self.dy > 0 and self.y > self.level.height-core.height/2:
+            self.dy *= -1
+        if self.dy < 0 and self.y < core.height/2:
+            self.dy *= -1
+        m = self.level.width/2
+        n = (self.level.width-core.width)/2
+
+        self.x += self.dx+self.dx*(n - abs(self.x - m))/float(n/2)
+        self.y += self.dy
+        return True
+    #enddef
+
+    def getPos(self):
+        return self.x, self.y
+    #enddef
+
+#endclass
 
