@@ -12,7 +12,7 @@ def load(fName):
 
 def loadTiles(fName, tileSize):
     out = []
-    src = pygame.image.load(fName)
+    src = pygame.image.load(fName).convert_alpha()
     for y in xrange(0, src.get_height(), tileSize):
         for x in xrange(0, src.get_width(), tileSize):
             img = pygame.Surface((tileSize, tileSize), 0, src)

@@ -8,6 +8,7 @@ tileSize = 40
 
 
 class Empty:
+    impassable = False
     def draw(self, x, y):
         pass
     #enddef
@@ -15,6 +16,7 @@ class Empty:
 
 class Wall:
     img = None
+    impassable = True
 
     def __init__(self):
         self.img = data.tiles[4]
@@ -38,6 +40,8 @@ class Level:
     width = 0
     height = 0
     walls = []
+    x = 0
+    y = 0
 
     def __init__(self, no = 0):
         self.load(no)
@@ -50,6 +54,8 @@ class Level:
         playerMissiles = []
         aliens = []
         self.walls = []
+        x = 0
+        y = 0
         
         f = open("lvl/%03d.lvl"%(no))
         maxX = 0
@@ -103,8 +109,8 @@ class Level:
         y = 0
         if self.players:
             plx, ply = self.players[0].getPos()
-            y = int(ply) - core.height/2
-            x = int(plx) - core.width/2
+            y = ply - core.height/2
+            x = plx - core.width/2
             if x < 0:
                 x = 0
             if x > self.width - core.width:
@@ -117,6 +123,9 @@ class Level:
             x = (self.width - core.width) / 2
         #endif
 
+        x = int(x)
+        y = int(y)
+
         for ty, wall in enumerate(self.walls[y/tileSize:y/tileSize+core.height/tileSize+1]):
             for tx, w in enumerate(wall):
                 w.draw(tx*tileSize-x, ty*tileSize-y%tileSize)
@@ -128,4 +137,15 @@ class Level:
             obj.draw(-x, -y)
     #enddef
 
+    def collision (self, x, y):
+        if x<0 or x>=self.width:
+            return False
+        if y<0 or y>=self.height:
+            return False
+        x = int(x/tileSize)
+        y = int(y/tileSize)
+        if x>len(self.walls[y]):
+            return False
+        return self.walls[y][x].impassable
+    #enddef
 #endclass

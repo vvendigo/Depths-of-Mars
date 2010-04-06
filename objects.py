@@ -56,6 +56,7 @@ class Player(BaseObj):
         self.controls = controls
         self.level = level
         self.img = data.playerShip
+        self.energy = 100
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
         BaseObj.__init__(self, x, y)
@@ -68,6 +69,22 @@ class Player(BaseObj):
     #enddef
 
     def behave(self):
+        # level collision
+        if self.level.collision(self.rect.centerx+self.speed[0], self.rect.top+self.speed[1]):
+            self.energy += self.speed[1]
+            self.speed[1] *= -1
+        if self.level.collision(self.rect.centerx+self.speed[0], self.rect.bottom+self.speed[1]):
+            self.energy -= self.speed[1]
+            self.speed[1] *= -1
+        if self.level.collision(self.rect.left+self.speed[0], self.rect.centery+self.speed[1]):
+            self.energy += self.speed[0]
+            self.speed[0] *= -1
+        if self.level.collision(self.rect.right+self.speed[0], self.rect.centery+self.speed[1]):
+            self.energy -= self.speed[0]
+            self.speed[0] *= -1
+
+        if self.energy <= 0:
+            return False
         if self.controls.fire and pygame.time.get_ticks() > self.reloadTime:
             self.fire()
         #endif
@@ -81,14 +98,14 @@ class Player(BaseObj):
     #enddef
 
     def getPos(self):
-        return self.rect.center
+        return self.rect.centerx, self.rect.centery
     #enddef
 #endclass
 
 class PlayerMissile(BaseObj):
     def __init__(self, x, y):
         self.img = data.missile
-        self.speed = [0, 6]
+        self.speed = [0, 10]
         self.energy = 10
         BaseObj.__init__(self, x, y, 'c')
     #enddef
@@ -99,8 +116,8 @@ class PlayerMissile(BaseObj):
     #enddef
 
     def behave(self):
-        self.speed[1] *= 0.99
-        if self.speed[1] < 1 or self.energy <= 0:
+        self.speed[1] *= 0.98
+        if self.speed[1] < 5 or self.energy <= 0:
             return False
         return BaseObj.behave(self)
     #enddef
