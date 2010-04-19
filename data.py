@@ -1,10 +1,13 @@
 import pygame
+import core
 
 playerShip = None
 tiles = None
 alien = None
 missile = None
 
+mnuFont1 = None
+mnuFont2 = None
 
 def load(fName):
     return pygame.image.load(fName).convert_alpha()
@@ -24,9 +27,12 @@ def loadTiles(fName, tileSize):
 #enddef
 
 def init():
-    global playerShip, tiles, alien, missile
+    global playerShip, tiles, alien, missile, mnuFont1, mnuFont2
     playerShip = load('img/module.png')
     alien = load('img/alien.png')
     missile = load('img/missile.png')
-    tiles = loadTiles('img/tiles.png', 40)
+    tiles = loadTiles('img/tiles.png', core.tileSize)
+    mnuFont1 = pygame.font.Font(pygame.font.get_default_font(), 30)
+    mnuFont2 = pygame.font.Font(pygame.font.get_default_font(), 50)
+    mnuFont2.set_bold(True)
 #enddef

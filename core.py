@@ -4,6 +4,9 @@ font = None
 width = 640
 height = 480
 appNme = "appName"
+
+tileSize = 40
+
 screen = None
 
 def init():
@@ -17,7 +20,7 @@ def init():
 
 class Controls:
     def __init__(self):
-        self.quit = False
+        self.exit = False
         self.left = False
         self.right = False
         self.up = False
@@ -26,7 +29,7 @@ class Controls:
     #enddef
 
     def onKeyDn(self, key):
-        if key==27:  self.quit = True
+        if key==27:  self.exit = True
         if key==273: self.up = True
         if key==274: self.down = True
         if key==276: self.left = True
@@ -35,6 +38,7 @@ class Controls:
     #endif
 
     def onKeyUp(self, key):
+        if key==27:  self.exit = False
         if key==273: self.up = False
         if key==274: self.down = False
         if key==276: self.left = False

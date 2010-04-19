@@ -43,6 +43,28 @@ class Ball(BaseObj):
         if self.energy <= 0:
             return False
 
+        # level collision
+        if self.speed[1]<0 and \
+            ( self.level.collision(self.rect.left, self.rect.top+self.speed[1])\
+            or self.level.collision(self.rect.right, self.rect.top+self.speed[1])):
+            self.energy += self.speed[1]
+            self.speed[1] *= -1
+        if self.speed[1]>0 and \
+            ( self.level.collision(self.rect.left, self.rect.bottom+self.speed[1])\
+            or self.level.collision(self.rect.right, self.rect.bottom+self.speed[1])):
+            self.energy -= self.speed[1]
+            self.speed[1] *= -1
+        if self.speed[0]<0 and \
+            ( self.level.collision(self.rect.left+self.speed[0], self.rect.top)\
+            or self.level.collision(self.rect.left+self.speed[0], self.rect.bottom)):
+            self.energy += self.speed[0]
+            self.speed[0] *= -1
+        if self.speed[0]>0 and \
+            ( self.level.collision(self.rect.right+self.speed[0], self.rect.top)\
+            or self.level.collision(self.rect.right+self.speed[0], self.rect.bottom)):
+            self.energy -= self.speed[0]
+            self.speed[0] *= -1
+
         if self.rect.left < 0 or self.rect.right > core.width:
             self.speed[0] = -self.speed[0]
         if self.rect.top < 0 or self.rect.bottom > core.height:
@@ -70,16 +92,24 @@ class Player(BaseObj):
 
     def behave(self):
         # level collision
-        if self.level.collision(self.rect.centerx+self.speed[0], self.rect.top+self.speed[1]):
+        if self.speed[1]<0 and \
+            ( self.level.collision(self.rect.left, self.rect.top+self.speed[1])\
+            or self.level.collision(self.rect.right, self.rect.top+self.speed[1])):
             self.energy += self.speed[1]
             self.speed[1] *= -1
-        if self.level.collision(self.rect.centerx+self.speed[0], self.rect.bottom+self.speed[1]):
+        if self.speed[1]>0 and \
+            ( self.level.collision(self.rect.left, self.rect.bottom+self.speed[1])\
+            or self.level.collision(self.rect.right, self.rect.bottom+self.speed[1])):
             self.energy -= self.speed[1]
             self.speed[1] *= -1
-        if self.level.collision(self.rect.left+self.speed[0], self.rect.centery+self.speed[1]):
+        if self.speed[0]<0 and \
+            ( self.level.collision(self.rect.left+self.speed[0], self.rect.top)\
+            or self.level.collision(self.rect.left+self.speed[0], self.rect.bottom)):
             self.energy += self.speed[0]
             self.speed[0] *= -1
-        if self.level.collision(self.rect.right+self.speed[0], self.rect.centery+self.speed[1]):
+        if self.speed[0]>0 and \
+            ( self.level.collision(self.rect.right+self.speed[0], self.rect.top)\
+            or self.level.collision(self.rect.right+self.speed[0], self.rect.bottom)):
             self.energy -= self.speed[0]
             self.speed[0] *= -1
 

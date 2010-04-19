@@ -1,21 +1,25 @@
 TODO:
 - status bar
-- player x level collisions
 - player x monster collisions
+- monsters x missile collisions
 - improve level class
 - scenario class/obj
   - menu
   - map of caves
   - cave extermination dependent actions
   - text info
+- ammo, fuel??
 - animated sprites
 - paralax scrolling bg
 - sounds / sound class
 - new alien classes
   - steam beam
-  - alien breeder
+  - alien brooder
+- better sprites
+- better tiles
 
 DONE:
 - proper shooting
 - some test sprites
+- player x level collisions
 

@@ -4,7 +4,6 @@ import objects
 import data
 import random
 
-tileSize = 40
 
 
 class Empty:
@@ -33,6 +32,7 @@ class Wall:
 
 class Level:
 
+    number = 0
     players = []
     playerMissiles = []
     aliens = []
@@ -43,21 +43,19 @@ class Level:
     x = 0
     y = 0
 
-    def __init__(self, no = 0):
-        self.load(no)
-#        for i in xrange(0,10):
-#            self.aliens.append(objects.Ball((i*20)%core.width, 10*((i*20)/core.width), self))
+    def __init__(self, no):
+        self.number = no
     #enddef
 
-    def load(self, no):
-        players = []
-        playerMissiles = []
-        aliens = []
+    def load(self):
+        self.players = []
+        self.playerMissiles = []
+        self.aliens = []
         self.walls = []
         x = 0
         y = 0
         
-        f = open("lvl/%03d.lvl"%(no))
+        f = open("lvl/%03d.lvl"%(self.number))
         maxX = 0
         for y,ln in enumerate(f):
             ln = ln.rstrip()
@@ -65,19 +63,23 @@ class Level:
                 maxX = len(ln)
             wall = []
             for x,ch in enumerate(ln):
+                # actors
                 if ch == 'p':
-                    self.players.append(objects.Player(x*tileSize, y*tileSize, core.controls, self))
+                    self.players.append(objects.Player(x*core.tileSize, y*core.tileSize, core.controls, self))
+                if ch == 'b':
+                    self.aliens.append(objects.Ball(x*core.tileSize, y*core.tileSize, self))
+                # walls
                 if ch == '#':
                     wall.append(Wall())
                 else:
                     wall.append(Empty())
             #endfor
             self.walls.append(wall)
-            self.height += tileSize
+            self.height += core.tileSize
         #endfor
-        self.width = maxX * tileSize
+        self.width = maxX * core.tileSize
         if not self.players:
-            self.players.append(objects.DummyPlayer(0, 0, self))
+            self.players.append(objects.DummyPlayer(core.width/2, core.height/2, self))
     #enddef
 
     def behave(self):
@@ -126,9 +128,9 @@ class Level:
         x = int(x)
         y = int(y)
 
-        for ty, wall in enumerate(self.walls[y/tileSize:y/tileSize+core.height/tileSize+1]):
+        for ty, wall in enumerate(self.walls[y/core.tileSize:y/core.tileSize+core.height/core.tileSize+1]):
             for tx, w in enumerate(wall):
-                w.draw(tx*tileSize-x, ty*tileSize-y%tileSize)
+                w.draw(tx*core.tileSize-x, ty*core.tileSize-y%core.tileSize)
         for obj in self.players:
             obj.draw(-x, -y)
         for obj in self.playerMissiles:
@@ -142,8 +144,8 @@ class Level:
             return False
         if y<0 or y>=self.height:
             return False
-        x = int(x/tileSize)
-        y = int(y/tileSize)
+        x = int(x/core.tileSize)
+        y = int(y/core.tileSize)
         if x>len(self.walls[y]):
             return False
         return self.walls[y][x].impassable

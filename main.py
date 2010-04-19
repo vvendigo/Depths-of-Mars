@@ -2,7 +2,7 @@
 import sys, pygame
 import core
 import data
-from level import Level
+from scenario import Scenario
 
 pygame.mixer.pre_init(22050, -16, 2, 2048)
 pygame.init()
@@ -20,19 +20,19 @@ pygame.time.set_timer(pygame.USEREVENT+1, 1000/framerate)
 
 #snd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
 
-level = Level(1)
+scenario = Scenario()
 
-while not core.controls.quit:
+while not scenario.quit:
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: core.controls.quit = True
+        if event.type == pygame.QUIT: scenario.quit = True
         if event.type == pygame.KEYDOWN: core.controls.onKeyDn(event.key)
         if event.type == pygame.KEYUP: core.controls.onKeyUp(event.key)
-        if event.type == pygame.USEREVENT+1: level.behave()
+        if event.type == pygame.USEREVENT+1: scenario.behave()
     #endfor
 
     core.screen.fill((0,0,0))
-    level.draw()
+    scenario.draw()
     core.screen.blit(core.font.render("%.3f"%(clock.get_fps()), False, (0,255,0)), (0,0))
     pygame.display.flip()
 
