@@ -52,6 +52,8 @@ class Level:
         self.playerMissiles = []
         self.aliens = []
         self.walls = []
+        self.width = 0
+        self.height = 0
         x = 0
         y = 0
         
@@ -68,6 +70,8 @@ class Level:
                     self.players.append(objects.Player(x*core.tileSize, y*core.tileSize, core.controls, self))
                 if ch == 'b':
                     self.aliens.append(objects.Ball(x*core.tileSize, y*core.tileSize, self))
+                if ch == 'c':
+                    self.aliens.append(objects.Crawler(x*core.tileSize, y*core.tileSize, self))
                 # walls
                 if ch == '#':
                     wall.append(Wall())
@@ -131,11 +135,11 @@ class Level:
         for ty, wall in enumerate(self.walls[y/core.tileSize:y/core.tileSize+core.height/core.tileSize+1]):
             for tx, w in enumerate(wall):
                 w.draw(tx*core.tileSize-x, ty*core.tileSize-y%core.tileSize)
-        for obj in self.players:
-            obj.draw(-x, -y)
         for obj in self.playerMissiles:
             obj.draw(-x, -y)
         for obj in self.aliens:
+            obj.draw(-x, -y)
+        for obj in self.players:
             obj.draw(-x, -y)
     #enddef
 

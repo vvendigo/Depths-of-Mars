@@ -55,8 +55,8 @@ class Menu:
             self.opts += [(None, )]*(addLen)
             self.height += (addLen - 1) * self.skipSpace
         self.opts[no] = \
-            ( data.mnuFont1.render(text, True, (200,50,50)).convert_alpha(), \
-              data.mnuFont2.render(text, True, (200,50,50)).convert_alpha(), \
+            ( data.mnuFont1.render(text, True, (225,60,20)).convert_alpha(), \
+              data.mnuFont2.render(text, True, (225,60,20)).convert_alpha(), \
               callback )
         self.height += self.opts[no][0].get_rect().height
     #enddef
