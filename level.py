@@ -47,13 +47,17 @@ class Level:
         self.number = no
     #enddef
 
-    def load(self):
+    def reset(self):
         self.players = []
         self.playerMissiles = []
         self.aliens = []
         self.walls = []
         self.width = 0
         self.height = 0
+    #enddef
+
+    def load(self):
+        self.reset()
         x = 0
         y = 0
         
@@ -85,6 +89,56 @@ class Level:
         if not self.players:
             self.players.append(objects.DummyPlayer(core.width/2, core.height/2, self))
     #enddef
+
+    def randDir(self, width, x):
+        dx = 0
+        while not dx:
+            dx = random.randint(1,width-2) - x
+        return dx
+    #enddef
+
+    def generate(self):
+        self.reset()
+        width = 10 + self.number * 10
+        depth = 20 + self.number * 50
+        for i in xrange(0,depth):
+            ln = []
+            for j in xrange(0,width):
+                ln.append(Wall())
+            self.walls.append(ln)
+        #endfor
+
+        x = width / 2
+        y = 0
+        dx = 0
+        dy = 5
+        random.seed(self.number)
+        while y < depth-1:
+            for i in range(0,random.randint(2,4)):
+                for j in range(random.randint(-1,0),random.randint(2,4)):
+                    if x+j < width-1 and x+j>0 and y+i < depth:
+                        self.walls[y+i][x+j] = Empty()
+            if dy:
+                dy -= 1
+                y += 1
+                if not dy:
+                    dx = self.randDir(width-1, x)
+            elif dx:
+                if dx > 0:
+                    dx -= 1
+                    x += 1
+                else:
+                    dx += 1
+                    x -= 1
+                if not dx:
+                    dy = random.randint(2,10)
+        #endwhile
+
+        self.height = depth * core.tileSize
+        self.width = width * core.tileSize
+        self.players.append(objects.Player(self.width/2, 10, core.controls, self))
+    #enddef
+
 
     def behave(self):
         newList = []

@@ -13,7 +13,7 @@ class Scenario:
     def __init__(self):
         menu = Menu()
         menu.set(0, 'New Game', self.newGame)
-        menu.set(1, 'Nevim co...')
+        menu.set(1, 'Random Level', self.randomLevel)
         menu.set(3, 'Quit', self.end )
         self.menu = menu
 
@@ -25,6 +25,12 @@ class Scenario:
     def newGame(self):
         self.level = 1
         self.initLevel()
+        self.menuOn = False
+    #enddef
+
+    def randomLevel(self):
+        self.level = 1
+        self.levels[self.level][2].generate()
         self.menuOn = False
     #enddef
 
