@@ -18,7 +18,7 @@ class Wall:
     impassable = True
 
     def __init__(self):
-        self.img = data.tiles[4]
+        self.img = data.tiles[random.randint(0, len(data.tiles)-1)]
         self.rect = self.img.get_rect()
     #enddef
 

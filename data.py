@@ -1,5 +1,6 @@
 import pygame
 import core
+from random import randint
 
 playerShip = None
 tiles = None
@@ -26,12 +27,31 @@ def loadTiles(fName, tileSize):
     return out
 #enddef
 
+def makeTile(setup = [[1,1,1],[1,1,1],[1,1,1]]):
+    """ Make tile filled with random noise
+    """
+
+    s = pygame.Surface((core.tileSize, core.tileSize))
+    for x in xrange(0, core.tileSize):
+        for y in xrange(0, core.tileSize):
+            r = randint(20,150)
+            s.set_at((x,y), (r+90, r+randint(-r/10,r/10), r+randint(-r/20,+r/20)))
+    #endfor
+
+    return s.convert()
+#enddef
+
+
+
 def init():
     global playerShip, tiles, alien, missile, mnuFont1, mnuFont2
     playerShip = load('img/module.png')
     alien = load('img/alien.png')
     missile = load('img/missile.png')
-    tiles = loadTiles('img/tiles.png', core.tileSize)
+    tiles = []
+    for i in xrange(0,6):
+        tiles.append(makeTile())
+    #loadTiles('img/tiles.png', core.tileSize)
     mnuFont1 = pygame.font.Font(pygame.font.get_default_font(), 30)
     mnuFont2 = pygame.font.Font(pygame.font.get_default_font(), 50)
     mnuFont2.set_bold(True)
