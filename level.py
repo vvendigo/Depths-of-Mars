@@ -13,8 +13,20 @@ class Empty:
     #enddef
 #endclass
 
+class Edge:
+    impassable = False
+    def __init__(self, pattern):
+        self.img = data.emptyTiles[tuple(pattern)]
+        self.rect = self.img.get_rect()
+    #enddef
+
+    def draw(self, x, y):
+        self.rect.topleft = (x,y)
+        core.screen.blit(self.img, self.rect)
+    #enddef
+#endclass
+
 class Wall:
-    img = None
     impassable = True
 
     def __init__(self):
@@ -88,6 +100,8 @@ class Level:
         self.width = maxX * core.tileSize
         if not self.players:
             self.players.append(objects.DummyPlayer(core.width/2, core.height/2, self))
+
+        self.makeEdges()
     #enddef
 
     def randDir(self, width, x):
@@ -137,6 +151,27 @@ class Level:
         self.height = depth * core.tileSize
         self.width = width * core.tileSize
         self.players.append(objects.Player(self.width/2, 10, core.controls, self))
+        self.makeEdges()
+    #enddef
+
+    def makeEdges(self):
+        for y in xrange(0, len(self.walls)):
+            for x in xrange(0, len(self.walls[y])):
+                if self.walls[y][x].impassable:
+                    continue
+                patt = []
+                for j in xrange(y-1,y+2):
+                    for i in xrange(x-1,x+2):
+                        if j<0 or i<0 \
+                            or j>=len(self.walls) or i>=len(self.walls[j]) \
+                            or not self.walls[j][i].impassable:
+                            patt.append(0)
+                        else:
+                            patt.append(1)
+                if patt != [0,0,0, 0,0,0, 0,0,0]:
+                    self.walls[y][x] = Edge(patt)
+            #endfor
+        #endfor
     #enddef
 
 
