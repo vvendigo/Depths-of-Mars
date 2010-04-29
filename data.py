@@ -32,9 +32,10 @@ def makeTile(setup = (1,1,1, 1,1,1, 1,1,1)):
     """ Make tile filled with random noise
     """
     smpSize = core.tileSize/4 # sample radius
-    smpArea = float((2*smpSize)*(2*smpSize)*0.75)
+    smpArea = float((2*smpSize)*(2*smpSize)*0.48)
 
     s = pygame.Surface((core.tileSize, core.tileSize))
+    s.lock()
     for x in xrange(0, core.tileSize):
         for y in xrange(0, core.tileSize):
             if setup[4]:
@@ -50,21 +51,21 @@ def makeTile(setup = (1,1,1, 1,1,1, 1,1,1)):
                 if sy1 < 0: py = -sy1
                 if sx2 >= core.tileSize: px = 2*smpSize - (sx2-core.tileSize)
                 if sy2 >= core.tileSize: py = 2*smpSize - (sy2-core.tileSize)
-                opacity = 0.0
-                if px>=0 and py>=0:
-                    opacity = (\
-                          setup[(sy1/core.tileSize+1)*3+sx1/core.tileSize+1]*(px*py)\
-                        + setup[(sy1/core.tileSize+1)*3+sx2/core.tileSize+1]*((2*smpSize-px)*py)\
-                        + setup[(sy2/core.tileSize+1)*3+sx2/core.tileSize+1]*((2*smpSize-px)*(2*smpSize-py))\
-                        + setup[(sy2/core.tileSize+1)*3+sx1/core.tileSize+1]*(px*(2*smpSize-py)) ) / smpArea
-                #print opacity
+                opacity = (\
+                      setup[(sy1/core.tileSize+1)*3+sx1/core.tileSize+1]*(px*py)\
+                    + setup[(sy1/core.tileSize+1)*3+sx2/core.tileSize+1]*((2*smpSize-px)*py)\
+                    + setup[(sy2/core.tileSize+1)*3+sx2/core.tileSize+1]*((2*smpSize-px)*(2*smpSize-py))\
+                    + setup[(sy2/core.tileSize+1)*3+sx1/core.tileSize+1]*(px*(2*smpSize-py)) ) / smpArea
+                if opacity > 1.0:
+                    opacity = 1.0
+            #endif
             r = randint(20,150)
             s.set_at((x,y),\
                 (int((r+90)*opacity),\
                 int((r+randint(-r/10,r/10))*opacity),\
                 int((r+randint(-r/20,+r/20))*opacity)))
     #endfor
-
+    s.unlock()
     return s.convert()
 #enddef
 
@@ -72,17 +73,22 @@ def makeTile(setup = (1,1,1, 1,1,1, 1,1,1)):
 
 def init():
     global playerShip, tiles, emptyTiles, alien, missile, mnuFont1, mnuFont2
+
+    core.screen.blit(core.font.render("Generating...", True, (230,20,9)), (0,0))
+    pygame.display.flip()
+
     playerShip = load('img/module.png')
     alien = load('img/alien.png')
     missile = load('img/missile.png')
-    tiles = []
     
+    t = pygame.time.get_ticks()
+
+    tiles = []
     for i in xrange(0, 5):
         tiles.append(makeTile())
 
     emptyTiles = {}
     patt = [0,0,0, 0,0,0, 0,0,0]
-    t = pygame.time.get_ticks()
     for i in xrange(1, 2**9):
         i = 0
         while patt[i]:
@@ -93,10 +99,9 @@ def init():
             continue
         emptyTiles[tuple(patt)] = makeTile(patt)
     #endfor
-    print (pygame.time.get_ticks() - t)/1000.0
-#    import sys
-#    sys.exit()
-    #loadTiles('img/tiles.png', core.tileSize)
+
+    print "Tiles generated in %f secs."% ((pygame.time.get_ticks() - t)/1000.0)
+
     mnuFont1 = pygame.font.Font(pygame.font.get_default_font(), 30)
     mnuFont2 = pygame.font.Font(pygame.font.get_default_font(), 50)
     mnuFont2.set_bold(True)

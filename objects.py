@@ -128,11 +128,13 @@ class Player(BaseObj):
         self.controls = controls
         self.level = level
         self.img = data.playerShip
-        self.energy = 100
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
         self.speed = [0,0]
         self.vizor = [0,0]
+        self.energy = 100
+        self.fuel = 100
+        self.ammo = 100
         BaseObj.__init__(self, x, y)
     #enddef
 
@@ -192,6 +194,20 @@ class Player(BaseObj):
 
     def getPos(self):
         return self.rect.centerx+self.vizor[0], self.rect.centery+self.vizor[1]
+    #enddef
+
+    def draw(self, corrx, corry):
+        BaseObj.draw(self, corrx, corry)
+        # draw status bars
+        x = y = 15
+        core.screen.fill((0,0,0), (x+0*7, y, 6, 52))
+        core.screen.fill((0,0,0), (x+1*7, y, 6, 52))
+        core.screen.fill((0,0,0), (x+2*7, y, 6, 52))
+
+        core.screen.fill((200,0,0), (x+1+0*7, y+1, 4, self.ammo/2))
+        core.screen.fill((0,0,200), (x+1+1*7, y+1, 4, self.fuel/2))
+        core.screen.fill((0,200,0), (x+1+2*7, y+1, 4, self.energy/2))
+        
     #enddef
 #endclass
 

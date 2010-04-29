@@ -1,5 +1,5 @@
 TODO:
-- status bar?
+- ammo, fuel??
 - player x monster collisions
 - monsters x missile collisions
 - improve level class
@@ -7,7 +7,6 @@ TODO:
   - map of caves
   - cave extermination dependent actions
   - text info
-- ammo, fuel??
 - animated sprites
 - paralax scrolling bg?
 - sounds / sound class
@@ -15,9 +14,10 @@ TODO:
   - steam beam
   - alien brooder
 - better sprites
-- better tiles
 
 DONE:
+- status bar
+- better tiles
 - proper shooting
 - some test sprites
 - player x level collisions

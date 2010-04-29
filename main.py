@@ -9,7 +9,7 @@ pygame.init()
 
 core.width = 640
 core.height = 480
-core.appName = "Pygame experiment"
+core.appName = "Depths of Mars"
 core.init()
 
 data.init()
