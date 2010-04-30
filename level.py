@@ -16,7 +16,7 @@ class Empty:
 class Edge:
     impassable = False
     def __init__(self, pattern):
-        self.img = data.emptyTiles[tuple(pattern)]
+        self.img = data.tiles[tuple(pattern)]
         self.rect = self.img.get_rect()
     #enddef
 
@@ -29,8 +29,8 @@ class Edge:
 class Wall:
     impassable = True
 
-    def __init__(self):
-        self.img = data.tiles[random.randint(0, len(data.tiles)-1)]
+    def __init__(self, pattern):
+        self.img = data.tiles[tuple(pattern)]
         self.rect = self.img.get_rect()
     #enddef
 
@@ -38,8 +38,6 @@ class Wall:
         self.rect.topleft = (x,y)
         core.screen.blit(self.img, self.rect)
     #enddef
-
-
 #endclass
 
 class Level:
@@ -72,7 +70,8 @@ class Level:
         self.reset()
         x = 0
         y = 0
-        
+        lvlData = []
+
         f = open("lvl/%03d.lvl"%(self.number))
         maxX = 0
         for y,ln in enumerate(f):
@@ -90,18 +89,18 @@ class Level:
                     self.aliens.append(objects.Crawler(x*core.tileSize, y*core.tileSize, self))
                 # walls
                 if ch == '#':
-                    wall.append(Wall())
+                    wall.append(1)
                 else:
-                    wall.append(Empty())
+                    wall.append(0)
             #endfor
-            self.walls.append(wall)
+            lvlData.append(wall)
             self.height += core.tileSize
         #endfor
         self.width = maxX * core.tileSize
         if not self.players:
             self.players.append(objects.DummyPlayer(core.width/2, core.height/2, self))
 
-        self.makeEdges()
+        self.setTiles(lvlData)
     #enddef
 
     def randDir(self, width, x):
@@ -113,13 +112,14 @@ class Level:
 
     def generate(self):
         self.reset()
+        lvlData = []
         width = 10 + self.number * 10
         depth = 20 + self.number * 50
         for i in xrange(0,depth):
             ln = []
             for j in xrange(0,width):
-                ln.append(Wall())
-            self.walls.append(ln)
+                ln.append(1)
+            lvlData.append(ln)
         #endfor
 
         x = width / 2
@@ -131,7 +131,7 @@ class Level:
             for i in range(0,random.randint(2,4)):
                 for j in range(random.randint(-1,0),random.randint(2,4)):
                     if x+j < width-1 and x+j>0 and y+i < depth:
-                        self.walls[y+i][x+j] = Empty()
+                        lvlData[y+i][x+j] = 0
             if dy:
                 dy -= 1
                 y += 1
@@ -151,26 +151,29 @@ class Level:
         self.height = depth * core.tileSize
         self.width = width * core.tileSize
         self.players.append(objects.Player(self.width/2, 10, core.controls, self))
-        self.makeEdges()
+        self.setTiles(lvlData)
     #enddef
 
-    def makeEdges(self):
-        for y in xrange(0, len(self.walls)):
-            for x in xrange(0, len(self.walls[y])):
-                if self.walls[y][x].impassable:
-                    continue
+    def setTiles(self, lvlData):
+        for y in xrange(0, len(lvlData)):
+            row = []
+            for x in xrange(0, len(lvlData[y])):
                 patt = []
                 for j in xrange(y-1,y+2):
                     for i in xrange(x-1,x+2):
                         if j<0 or i<0 \
-                            or j>=len(self.walls) or i>=len(self.walls[j]) \
-                            or not self.walls[j][i].impassable:
+                            or j>=len(lvlData) or i>=len(lvlData[j]):
                             patt.append(0)
                         else:
-                            patt.append(1)
-                if patt != [0,0,0, 0,0,0, 0,0,0]:
-                    self.walls[y][x] = Edge(patt)
+                            patt.append(lvlData[j][i])
+                if patt == [0,0,0, 0,0,0, 0,0,0]:
+                    row.append(Empty())
+                elif lvlData[y][x]:
+                    row.append(Wall(patt))
+                else:
+                    row.append(Edge(patt))
             #endfor
+            self.walls.append(row)
         #endfor
     #enddef
 
