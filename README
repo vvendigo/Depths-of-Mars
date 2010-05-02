@@ -1,21 +1,22 @@
 TODO:
-- ammo, fuel??
-- player x monster collisions
-- monsters x missile collisions
+- ammo, fuel
 - improve level class
 - scenario class/obj
   - map of caves
   - cave extermination dependent actions
   - text info
-- animated sprites
-- paralax scrolling bg?
 - sounds / sound class
 - new alien classes
   - steam beam
   - alien brooder
+- animated sprites
 - better sprites
+- paralax scrolling bg???
 
 DONE:
+- generated data caching
+- player x monster collisions
+- monsters x missile collisions
 - status bar
 - better tiles
 - proper shooting

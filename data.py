@@ -1,15 +1,27 @@
 import pygame
 import core
 from random import randint
+import os
 
+# dir setup
+generatedDataDir = 'generated'
+imgDir = 'img'
+
+# global for msg display 
+screenY = screenX = 0
+
+# data holders
 playerShip = None
 tiles = None
 emptyTiles = None
 alien = None
+brooder = None
 missile = None
 
 mnuFont1 = None
 mnuFont2 = None
+
+
 
 def load(fName):
     return pygame.image.load(fName).convert_alpha()
@@ -34,7 +46,7 @@ def makeTile(setup = (1,1,1, 1,1,1, 1,1,1)):
     smpSize = core.tileSize/6 # sample radius
     smpArea = float((2*smpSize)*(2*smpSize))
 
-    s = pygame.Surface((core.tileSize, core.tileSize))
+    s = pygame.Surface((core.tileSize, core.tileSize), pygame.HWSURFACE)
     s.fill((0,0,0))
     s.lock()
     for x in xrange(0, core.tileSize):
@@ -66,33 +78,69 @@ def makeTile(setup = (1,1,1, 1,1,1, 1,1,1)):
     return s.convert()
 #enddef
 
+def writeMsg(msg):
+    global screenY, screenX
+    screenY += core.font.get_height()
+    if screenY >= core.height - core.font.get_height():
+        core.screen.fill((0,0,0))
+        screenY = 0
+    #endif
+    msgI = core.font.render(msg, True, (230,20,9))
+    core.screen.blit(msgI, (0, screenY))
+    screenX = msgI.get_width()
+    pygame.display.flip()
+#enddef
 
+def writeProgress(no, of):
+    global screenY, screenX
+    msgI = core.font.render("%d %%   "%(int((float(no)/of)*100)), True, (230,20,9), (0,0,0))
+    core.screen.blit(msgI, (screenX, screenY))
+    pygame.display.update((screenX, screenY, msgI.get_width(), msgI.get_height()))
+#enddef
 
 def init():
-    global playerShip, tiles, emptyTiles, alien, missile, mnuFont1, mnuFont2
+    global imgDir, generatedDataDir,\
+        playerShip, tiles, emptyTiles, alien, brooder, missile, \
+        mnuFont1, mnuFont2
 
-    core.screen.blit(core.font.render("Generating...", True, (230,20,9)), (0,0))
-    pygame.display.flip()
+    writeMsg("Initializing data:")
 
-    playerShip = load('img/module.png')
-    alien = load('img/alien.png')
-    missile = load('img/missile.png')
+    writeMsg("Loading sprites...")
+    playerShip = load(os.path.join(imgDir, 'module.png'))
+    alien = load(os.path.join(imgDir, 'alien.png'))
+    brooder = load(os.path.join(imgDir, 'brooder.png'))
+    missile = load(os.path.join(imgDir, 'missile.png'))
 
     t = pygame.time.get_ticks()
+
+    if not os.access(generatedDataDir, os.X_OK):
+        os.mkdir(generatedDataDir)
+        writeMsg("Generating tiles: ")
+    else:
+        writeMsg("Loading tiles: ")
+    #endif
 
     tiles = {}
     patt = [0,0,0, 0,0,0, 0,0,0]
     for i in xrange(1, 2**9):
-        i = 0
-        while patt[i]:
-            patt[i] = 0
-            i += 1
-        patt[i] = 1
-        tiles[tuple(patt)] = makeTile(patt)
+        j = 0
+        while patt[j]:
+            patt[j] = 0
+            j += 1
+        patt[j] = 1
+        fPath = os.path.join(generatedDataDir, ''.join(map(str, patt)) + '.bmp')
+        if os.access(fPath, os.R_OK):
+            tiles[tuple(patt)] = load(fPath)
+        else:
+            tiles[tuple(patt)] = makeTile(patt)
+            pygame.image.save(tiles[tuple(patt)], fPath)
+        #endif
+        writeProgress(i, 2**9)
     #endfor
 
-    print "Tiles generated in %f secs."% ((pygame.time.get_ticks() - t)/1000.0)
+    writeMsg("Tiles processed in %f secs."% ((pygame.time.get_ticks() - t)/1000.0))
 
+    writeMsg("Loading fonts...")
     mnuFont1 = pygame.font.Font(pygame.font.get_default_font(), 30)
     mnuFont2 = pygame.font.Font(pygame.font.get_default_font(), 50)
     mnuFont2.set_bold(True)

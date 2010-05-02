@@ -2,10 +2,13 @@ import pygame
 import core
 from misc import *
 import data
+import math
+from random import randint
 
 class BaseObj:
     img = None
     speed = [0,0]
+    level = None
 
     def __init__(self, x=0, y=0, pos='tl'):
         self.rect = self.img.get_rect()
@@ -23,12 +26,18 @@ class BaseObj:
         self.rect = self.rect.move(self.speed)
         return True
     #enddef
+
+    def hurt(self, armSpec):
+        hurtEnergy = self.energy
+        self.energy -= armSpec
+        return hurtEnergy
+    #enddef
+
 #endclass
 
-class Ball(BaseObj):
-    def __init__(self, x, y, level):
+class Floater(BaseObj):
+    def __init__(self, x, y):
         self.img = data.alien
-        self.level = level
         mvlim = 2
         while self.speed[0]==0 and self.speed[1]==0:
             self.speed = [random.randint(-mvlim,mvlim), random.randint(-mvlim,mvlim)]
@@ -74,10 +83,41 @@ class Ball(BaseObj):
 #endclass
 
 
+class AlienBase(BaseObj):
+    def behave(self):
+        for m in self.level.playerMissiles:
+            if self.rect.colliderect(m.rect):
+                self.energy -= m.hurt(self.energy)
+        #endfor
+        if self.energy <= 0:
+            return False
+        return BaseObj.behave(self)
+    #enddef
+#endclass
+
+class Brooder(AlienBase):
+    def __init__(self, x, y):
+        self.img = data.brooder
+        self.energy = 50
+        self.speed = [0,0]
+        self.toDelivery = 0
+        AlienBase.__init__(self, x, y)
+    #enddef
+
+    def behave(self):
+        if randint(0, 32000) < self.toDelivery:
+            self.level.aliens.append(Crawler(self.rect.left, self.rect.top))
+            self.toDelivery = 0
+        else:
+            self.toDelivery += 1
+        #endif
+        return AlienBase.behave(self)
+    #enddef
+#endclass
+
 class Crawler(BaseObj):
-    def __init__(self, x, y, level):
+    def __init__(self, x, y):
         self.img = data.alien
-        self.level = level
         self.energy = 5
         self.speed = [0, -1]
         BaseObj.__init__(self, x, y)
@@ -124,9 +164,8 @@ class Crawler(BaseObj):
 
 
 class Player(BaseObj):
-    def __init__(self, x, y, controls, level):
+    def __init__(self, x, y, controls):
         self.controls = controls
-        self.level = level
         self.img = data.playerShip
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
@@ -141,11 +180,23 @@ class Player(BaseObj):
     def fire(self):
         self.reloadTime = pygame.time.get_ticks() + 700
         self.level.playerMissiles.append(\
-            PlayerMissile(self.rect.centerx, self.rect.bottom, self.level))
+            PlayerMissile(self.rect.centerx, self.rect.bottom))
         playStereo(self.shootSnd, self.rect.centerx)
     #enddef
 
     def behave(self):
+        # monster collisions
+        for m in self.level.aliens:
+            if self.rect.colliderect(m.rect):
+                self.energy -= m.hurt(self.energy)
+                dx = m.rect.centerx - self.rect.centerx
+                dy = m.rect.centery - self.rect.centery
+                d = math.hypot(dx, dy)
+                if d:
+                    self.speed[0] -= (dx/d)*3.0
+                    self.speed[1] -= (dy/d)*3.0
+            #endif
+        #endfor
         # level collision
         if self.speed[1]<0 and \
             ( self.level.collision(self.rect.left, self.rect.top+self.speed[1])\
@@ -212,17 +263,11 @@ class Player(BaseObj):
 #endclass
 
 class PlayerMissile(BaseObj):
-    def __init__(self, x, y, level):
+    def __init__(self, x, y):
         self.img = data.missile
         self.speed = [0, 10]
         self.energy = 10
-        self.level = level
         BaseObj.__init__(self, x, y, 'c')
-    #enddef
-
-    def hurt(self, armSpec):
-        self.energy = 0
-        return 10
     #enddef
 
     def behave(self):
@@ -237,9 +282,8 @@ class PlayerMissile(BaseObj):
 
 #endclass
 
-class DummyPlayer:
-    def __init__(self, x, y, level):
-        self.level = level
+class DummyPlayer (BaseObj):
+    def __init__(self, x, y):
         self.dx = 1
         self.dy = 0.25
         self.x = x

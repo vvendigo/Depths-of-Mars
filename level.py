@@ -58,6 +58,9 @@ class Level:
     #enddef
 
     def reset(self):
+        # set static refference of objs
+        objects.BaseObj.level = self
+
         self.players = []
         self.playerMissiles = []
         self.aliens = []
@@ -82,11 +85,13 @@ class Level:
             for x,ch in enumerate(ln):
                 # actors
                 if ch == 'p':
-                    self.players.append(objects.Player(x*core.tileSize, y*core.tileSize, core.controls, self))
-                if ch == 'b':
-                    self.aliens.append(objects.Ball(x*core.tileSize, y*core.tileSize, self))
+                    self.players.append(objects.Player(x*core.tileSize, y*core.tileSize, core.controls))
+                if ch == 'f':
+                    self.aliens.append(objects.Floater(x*core.tileSize, y*core.tileSize))
                 if ch == 'c':
-                    self.aliens.append(objects.Crawler(x*core.tileSize, y*core.tileSize, self))
+                    self.aliens.append(objects.Crawler(x*core.tileSize, y*core.tileSize))
+                if ch == 'b':
+                    self.aliens.append(objects.Brooder(x*core.tileSize, y*core.tileSize))
                 # walls
                 if ch == '#':
                     wall.append(1)
@@ -98,7 +103,7 @@ class Level:
         #endfor
         self.width = maxX * core.tileSize
         if not self.players:
-            self.players.append(objects.DummyPlayer(core.width/2, core.height/2, self))
+            self.players.append(objects.DummyPlayer(core.width/2, core.height/2))
 
         self.setTiles(lvlData)
     #enddef
@@ -150,7 +155,7 @@ class Level:
 
         self.height = depth * core.tileSize
         self.width = width * core.tileSize
-        self.players.append(objects.Player(self.width/2, 10, core.controls, self))
+        self.players.append(objects.Player(self.width/2, 10, core.controls))
         self.setTiles(lvlData)
     #enddef
 
