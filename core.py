@@ -26,24 +26,27 @@ class Controls:
         self.up = False
         self.down = False
         self.fire = False
+        self.enter = False
     #enddef
 
     def onKeyDn(self, key):
-        if key==27:  self.exit = True
-        if key==273: self.up = True
-        if key==274: self.down = True
-        if key==276: self.left = True
-        if key==275: self.right = True
-        if key==305: self.fire = True
+        if key==pygame.K_RETURN: self.enter = True
+        if key==pygame.K_ESCAPE: self.exit = True
+        if key==pygame.K_UP:     self.up = True
+        if key==pygame.K_DOWN:   self.down = True
+        if key==pygame.K_LEFT:   self.left = True
+        if key==pygame.K_RIGHT:  self.right = True
+        if key==pygame.K_RCTRL:  self.fire = True
     #endif
 
     def onKeyUp(self, key):
-        if key==27:  self.exit = False
-        if key==273: self.up = False
-        if key==274: self.down = False
-        if key==276: self.left = False
-        if key==275: self.right = False
-        if key==305: self.fire = False
+        if key==pygame.K_RETURN: self.enter = False
+        if key==pygame.K_ESCAPE: self.exit = False
+        if key==pygame.K_UP:     self.up = False
+        if key==pygame.K_DOWN:   self.down = False
+        if key==pygame.K_LEFT:   self.left = False
+        if key==pygame.K_RIGHT:  self.right = False
+        if key==pygame.K_RCTRL:  self.fire = False
     #enddef
 #endclass
 

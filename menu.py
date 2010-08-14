@@ -42,7 +42,8 @@ class Menu:
             self.active = len(self.opts) - 1
         if self.active >= len(self.opts):
             self.active = 0
-        if core.controls.fire:
+        if core.controls.fire or core.controls.enter:
+            core.controls.enter = False
             core.controls.fire = False
             if self.opts[self.active][2]:
                 self.opts[self.active][2]()

@@ -3,7 +3,7 @@ import core
 import objects
 import data
 import random
-
+import anim
 
 
 class Empty:
@@ -16,13 +16,11 @@ class Empty:
 class Edge:
     impassable = False
     def __init__(self, pattern):
-        self.img = data.tiles[tuple(pattern)]
-        self.rect = self.img.get_rect()
+        self.sprite = anim.Slot(data.images['border'+pattern])
     #enddef
 
     def draw(self, x, y):
-        self.rect.topleft = (x,y)
-        core.screen.blit(self.img, self.rect)
+        self.sprite.draw(core.screen, x, y)
     #enddef
 #endclass
 
@@ -30,13 +28,11 @@ class Wall:
     impassable = True
 
     def __init__(self, pattern):
-        self.img = data.tiles[tuple(pattern)]
-        self.rect = self.img.get_rect()
+        self.sprite = anim.Slot(data.images['tile'+str(random.randint(0,1))])
     #enddef
 
     def draw(self, x, y):
-        self.rect.topleft = (x,y)
-        core.screen.blit(self.img, self.rect)
+        self.sprite.draw(core.screen, x, y)
     #enddef
 #endclass
 
@@ -163,18 +159,28 @@ class Level:
         for y in xrange(0, len(lvlData)):
             row = []
             for x in xrange(0, len(lvlData[y])):
-                patt = []
-                for j in xrange(y-1,y+2):
-                    for i in xrange(x-1,x+2):
-                        if j<0 or i<0 \
-                            or j>=len(lvlData) or i>=len(lvlData[j]):
-                            patt.append(0)
-                        else:
-                            patt.append(lvlData[j][i])
-                if patt == [0,0,0, 0,0,0, 0,0,0]:
-                    row.append(Empty())
-                elif lvlData[y][x]:
+                patt = ''
+                if y-1 >= 0 and lvlData[y-1][x]:
+                    patt += '1'
+                else:
+                    patt += '0'
+                if x+1 < len(lvlData[y]) and lvlData[y][x+1]:
+                    patt += '1'
+                else:
+                    patt += '0'
+                if y+1 < len(lvlData) and x < len(lvlData[y+1]) and lvlData[y+1][x]:
+                    patt += '1'
+                else:
+                    patt += '0'
+                if x-1 >= 0 and lvlData[y][x-1]:
+                    patt += '1'
+                else:
+                    patt += '0'
+
+                if lvlData[y][x]:
                     row.append(Wall(patt))
+                elif patt == '0000':
+                    row.append(Empty())
                 else:
                     row.append(Edge(patt))
             #endfor

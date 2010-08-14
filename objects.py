@@ -4,22 +4,26 @@ from misc import *
 import data
 import math
 from random import randint
+import anim
 
 class BaseObj:
-    img = None
+    sprite = None
     speed = [0,0]
     level = None
 
     def __init__(self, x=0, y=0, pos='tl'):
-        self.rect = self.img.get_rect()
+        self.rect = self.sprite.getSurface().get_rect()
+        self.y = y
         if pos =='c':
-            self.rect.center = (x,y)
+            self.rect.centerx = x
+            self.rect.centery = y
         else:
-            self.rect.topleft = (x,y)
+            self.rect.left = x
+            self.rect.top = y
     #enddef
 
     def draw(self, corrx, corry):
-        core.screen.blit(self.img, self.rect.move((corrx, corry)))
+        self.sprite.draw(core.screen, self.rect.left+corrx, self.rect.top+corry)
     #enddef
 
     def behave(self):
@@ -37,7 +41,7 @@ class BaseObj:
 
 class Floater(BaseObj):
     def __init__(self, x, y):
-        self.img = data.alien
+        self.sprite = anim.Slot(data.images['alien'])
         mvlim = 2
         while self.speed[0]==0 and self.speed[1]==0:
             self.speed = [random.randint(-mvlim,mvlim), random.randint(-mvlim,mvlim)]
@@ -97,7 +101,7 @@ class AlienBase(BaseObj):
 
 class Brooder(AlienBase):
     def __init__(self, x, y):
-        self.img = data.brooder
+        self.sprite = anim.Slot(data.images['brooder'])
         self.energy = 50
         self.speed = [0,0]
         self.toDelivery = 0
@@ -117,7 +121,7 @@ class Brooder(AlienBase):
 
 class Crawler(BaseObj):
     def __init__(self, x, y):
-        self.img = data.alien
+        self.sprite = anim.Slot(data.images['alien'])
         self.energy = 5
         self.speed = [0, -1]
         BaseObj.__init__(self, x, y)
@@ -166,7 +170,7 @@ class Crawler(BaseObj):
 class Player(BaseObj):
     def __init__(self, x, y, controls):
         self.controls = controls
-        self.img = data.playerShip
+        self.sprite = anim.Slot(data.images['module'])
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
         self.speed = [0,0]
@@ -264,7 +268,7 @@ class Player(BaseObj):
 
 class PlayerMissile(BaseObj):
     def __init__(self, x, y):
-        self.img = data.missile
+        self.sprite = anim.Slot(data.images['missile'])
         self.speed = [0, 10]
         self.energy = 10
         BaseObj.__init__(self, x, y, 'c')
