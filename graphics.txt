@@ -1,0 +1,259 @@
+@color p 250 30 250
+@color D 250 100 80
+@color d 180 80 50
+
+@name border1000
+dddddddddd
+@end
+
+@name border0100
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+@end
+
+@name border0010
+'
+'
+'
+'
+'
+'
+'
+'
+'
+dddddddddd
+@end
+
+@name border0001
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+@end
+
+@name border1100
+dddddddDDD
+       dDD
+        dD
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+@end
+
+@name border0110
+         d
+         d
+         d
+         d
+         d
+         d
+         d
+        dD
+       dDD
+dddddddDDD
+@end
+
+@name border0011
+d
+d
+d
+d
+d
+d
+d
+Dd
+DDd
+DDDddddddd
+@end
+
+@name border1001
+DDDddddddd
+DDd
+Dd
+d
+d
+d
+d
+d
+d
+d
+@end
+
+@name border1010
+dddddddddd
+'
+'
+'
+'
+'
+'
+'
+'
+dddddddddd
+@end
+
+@name border0101
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+@end
+
+@name border1110
+dddddddDDD
+       dDD
+        dD
+         d
+         d
+         d
+         d
+        dD
+       dDD
+dddddddDDD
+@end
+
+@name border0111
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+Dd      dD
+DDd    dDD
+DDDDDDDDDD
+@end
+
+@name border1011
+DDDddddddd
+DDd
+Dd
+d
+d
+d
+d
+Dd
+DDd
+DDDddddddd
+@end
+
+@name border1101
+DDDDDDDDDD
+DDd    dDD
+Dd      dD
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+d        d
+@end
+
+@name border1111
+DDDddddDDD
+DDd    dDD
+Dd      dD
+d        d
+d        d
+d        d
+d        d
+Dd      dD
+DDd    dDD
+DDDddddDDD
+@end
+
+@name tile0
+dDDDdDdDDD
+DDdDDDDDDD
+dDDDDDDdDD
+DDDdDDDDDD
+DDDDDDDdDD
+DdDDDDDDdD
+DDDDDdDDDD
+DDdDDDDDDD
+DDDDDdDDDd
+DDdDDDDdDD
+@end
+
+@name tile1
+DDdDDDdDDD
+DDDDdDDDDd
+DdDDDDdDDD
+DDDdDDDDdD
+dDdDDdDDDD
+DDDdDDDdDD
+DDdDDDDDDd
+DDDDdDDDDD
+dDDDDDDDdD
+DdDDdDDDDd
+@end
+
+@name module
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name missile
+rRr
+RRR
+rRr
+
+@name alien
+ G    G G
+GgG    G
+  gGg gG
+   GGGGg G
+G gGGGGGG
+ GGGGGGg G
+G gGGGG
+   GggG
+  G    GG
+ G G   G
+
+
+@name brooder
+   GGGG
+   gGGg
+  gGGGGg
+GgGGGGGGgG
+GGGGGGGGGG
+GGGGGGGGGG
+GgGGGGGGgG
+  gGGGGg
+   gGGg
+   GGGG
+
