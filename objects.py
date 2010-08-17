@@ -27,6 +27,7 @@ class BaseObj:
     #enddef
 
     def behave(self):
+        self.sprite.behave()
         self.rect = self.rect.move(self.speed)
         return True
     #enddef

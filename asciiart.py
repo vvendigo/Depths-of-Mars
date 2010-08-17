@@ -26,6 +26,7 @@ def makeImg(buff, colors, pxSz):
 
 def load(fName, pxSz=1):
     colors = {
+        'W': (255,255,255), 'w': (128,128,128),
         'R': (255,0,0), 'r': (128,0,0),
         'G': (0,255,0), 'g': (0,128,0),
         'B': (0,0,255), 'b': (0,0,128) }
@@ -78,8 +79,10 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((640,480), pygame.HWSURFACE|pygame.DOUBLEBUF)
     clock = pygame.time.Clock()
 
-    aag = load('./graphics.txt', 3)
+    aag = load('./graphics.txt', 4)
     cavySprite = anim.Slot(aag['cavy'])
+    cavySprite2 = anim.Slot(aag['cavy'])
+    cavySprite2.rewind(20)
     invaderSprite = anim.Slot(aag['invader'])
     cx = 0
     cy = 300
@@ -122,11 +125,13 @@ if __name__ == "__main__":
         screen.fill((0,0,0))
         cavySprite.draw(screen, cx, cy)
         invaderSprite.draw(screen, 0, 350)
+        cavySprite2.draw(screen, 100, 350)
         pygame.display.flip()
 
         clock.tick(30)
 
         cavySprite.behave()
+        cavySprite2.behave()
         invaderSprite.behave()
     #endwhile
 
