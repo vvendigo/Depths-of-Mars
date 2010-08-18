@@ -39,5 +39,5 @@ while not scenario.quit:
     clock.tick(framerate)
 #endwhile
 
-#pygame.image.save(core.screen, "shot.jpg")
+pygame.image.save(core.screen, "shot.bmp")
 
