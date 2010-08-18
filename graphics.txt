@@ -2,6 +2,8 @@
 @color D 250 100 80
 @color d 180 80 50
 
+@duration 10
+
 @name border1000
 dddddddddd
 @end
@@ -232,6 +234,18 @@ rRr
 RRR
 rRr
 
+ r 
+rRr
+RRR
+rRr
+
+ r
+rRr
+rRr
+RRR
+rRr
+@end
+
 @name alien
  G    G G
 GgG    G
@@ -243,6 +257,17 @@ G gGGGG
    GggG
   G    GG
  G G   G
+
+G G    G 
+gGG    GGg
+  gGg gG
+   GGGGg 
+g gGGGGGGg
+GGGGGGGg G
+  gGGGG
+  GGggG
+GGg   gg 
+ G    G G
 
 
 @name brooder

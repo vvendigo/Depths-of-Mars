@@ -1,17 +1,16 @@
 
 class Animation:
 
-    def __init__(self, frames = None):
-        if frames != None:
-            self.frames = frames
-        else:
-            self.frames = []
-        self.length = len(self.frames)
+    def __init__(self):
+        self.frames = []
+        self.length = 0
+        self.duration = 0
         self.cycle = True
     #enddef
 
     def append(self, img, duration):
         self.frames.append((img, duration))
+        self.duration += duration
         self.length += 1
     #enddef
 #endclass
@@ -23,9 +22,9 @@ class Slot:
         self.rewind()
     #enddef
 
-    def rewind(self, frame = 0):
-        self.frame = frame
-        self.ticks = 0
+    def rewind(self, ticks = 0):
+        self.frame = 0
+        self.ticks = ticks % self.animation.duration
         self.ended = False
     #enddef
 
