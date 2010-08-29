@@ -230,22 +230,27 @@ bBBBBBBBBb
 
 
 @name missile
-rRr
-RRR
-rRr
+@duration 5
+ r
 
+@duration 10
  r 
 rRr
+ r 
+
+rRr
 RRR
 rRr
 
+@duration 5
  r
 rRr
-rRr
-RRR
-rRr
+ r
+
+ r
 @end
 
+@duration 10
 @name alien
  G    G G
 GgG    G

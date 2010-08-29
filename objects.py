@@ -176,6 +176,7 @@ class Player(BaseObj):
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
         self.speed = [0,0]
         self.vizor = [0,0]
+        self.shoot = [0,1]
         self.energy = 100
         self.fuel = 100
         self.ammo = 100
@@ -183,9 +184,22 @@ class Player(BaseObj):
     #enddef
 
     def fire(self):
+        t = 2
+        dx = 0
+        dy = 0
+        if self.speed[0] > t: dx = 1
+        if self.speed[0] < -t: dx = -1
+        if self.speed[1] > t: dy = 1
+        if self.speed[1] < -t: dy = -1
+        if dx or dy:
+            self.shoot[0] = dx
+            self.shoot[1] = dy
+        if pygame.time.get_ticks() <= self.reloadTime:
+            return
         self.reloadTime = pygame.time.get_ticks() + 700
         self.level.playerMissiles.append(\
-            PlayerMissile(self.rect.centerx, self.rect.bottom))
+            PlayerMissile(self.rect.centerx, self.rect.centery, \
+                            self.shoot[0], self.shoot[1]))
         playStereo(self.shootSnd, self.rect.centerx)
     #enddef
 
@@ -226,7 +240,7 @@ class Player(BaseObj):
 
         if self.energy <= 0:
             return False
-        if self.controls.fire and pygame.time.get_ticks() > self.reloadTime:
+        if self.controls.fire:
             self.fire()
         #endif
         if self.controls.left:
@@ -268,9 +282,9 @@ class Player(BaseObj):
 #endclass
 
 class PlayerMissile(BaseObj):
-    def __init__(self, x, y):
+    def __init__(self, x, y, dx, dy):
         self.sprite = anim.Slot(data.images['missile'])
-        self.speed = [0, 10]
+        self.speed = [dx*10, dy*10]
         self.energy = 10
         BaseObj.__init__(self, x, y, 'c')
     #enddef
@@ -279,8 +293,9 @@ class PlayerMissile(BaseObj):
         if self.level.collision(\
             self.rect.centerx+self.speed[0], self.rect.centery+self.speed[1]):
             self.energy = 0
+        self.speed[0] *= 0.98
         self.speed[1] *= 0.98
-        if self.speed[1] < 5 or self.energy <= 0:
+        if (math.fabs(self.speed[0]) < 5 and math.fabs(self.speed[1]) < 5) or self.energy <= 0:
             return False
         return BaseObj.behave(self)
     #enddef
