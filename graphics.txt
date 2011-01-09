@@ -216,7 +216,111 @@ dDDDDDDDdD
 DdDDdDDDDd
 @end
 
-@name module
+@name module1,0
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBbb 
+bBBBBBBbb 
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name module1,1
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBbBB
+bBBBBBbbbb
+ bBBBBBb  
+  bBbbBb
+
+
+@name module0,1
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBbbBBBb
+ bBBbbBBb 
+  bB  Bb
+
+
+@name module-1,1
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBbBBBBBBB
+bbbbBBBBBb
+  bBBBBBb 
+  bBbbBb
+
+
+@name module-1,0
+  bBbbBb
+ bBBBBBBb 
+bBBBBBBBBb
+BBBBBBBBBB
+ bbBBBBBBb
+ bbBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name module-1,-1
+  bBbbBb
+  bBBBBBb 
+bbbbBBBBBb
+BBbBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name module0,-1
+  bB  Bb
+ bBBbbBBb 
+bBBBbbBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name module1,-1
+  bBbbBb
+ bBBBBBb  
+bBBBBBbbbb
+BBBBBBBbBB
+bBBBBBBBBb
+bBBBBBBBBb
+BBBBBBBBBB
+bBBBBBBBBb
+ bBBBBBBb 
+  bBbbBb
+
+
+@name module0,0
   bBbbBb
  bBBBBBBb 
 bBBBBBBBBb
@@ -231,6 +335,7 @@ bBBBBBBBBb
 
 @name missile
 @duration 5
+'
  r
 
 @duration 10
@@ -247,6 +352,22 @@ rRr
 rRr
  r
 
+ r
+@end
+
+@name flame
+
+ R
+
+ r
+rRr
+ r
+
+ r
+r r
+ r
+
+'
  r
 @end
 

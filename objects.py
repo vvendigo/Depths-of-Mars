@@ -167,16 +167,35 @@ class Crawler(BaseObj):
 #endclass
 
 
+def sgn(x):
+    if x < 0: return -1
+    if x == 0: return 0
+    return 1
+#enddef
+
 
 class Player(BaseObj):
     def __init__(self, x, y, controls):
         self.controls = controls
-        self.sprite = anim.Slot(data.images['module'])
+        self.anims = (
+            (anim.Slot(data.images['module-1,-1']),
+            anim.Slot(data.images['module0,-1']),
+            anim.Slot(data.images['module1,-1'])),
+            (anim.Slot(data.images['module-1,0']),
+            anim.Slot(data.images['module0,0']),
+            anim.Slot(data.images['module1,0'])),
+            (anim.Slot(data.images['module-1,1']),
+            anim.Slot(data.images['module0,1']),
+            anim.Slot(data.images['module1,1']))
+        )
+        self.sprite = self.anims[2][1]
         self.reloadTime = pygame.time.get_ticks()
         self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
+        self.engineSnd = pygame.mixer.Sound("snd/engine.wav")
         self.speed = [0,0]
         self.vizor = [0,0]
-        self.shoot = [0,1]
+        self.dir = [0,1]
+        self.angle = math.pi/2
         self.energy = 100
         self.fuel = 100
         self.ammo = 100
@@ -185,21 +204,12 @@ class Player(BaseObj):
 
     def fire(self):
         t = 2
-        dx = 0
-        dy = 0
-        if self.speed[0] > t: dx = 1
-        if self.speed[0] < -t: dx = -1
-        if self.speed[1] > t: dy = 1
-        if self.speed[1] < -t: dy = -1
-        if dx or dy:
-            self.shoot[0] = dx
-            self.shoot[1] = dy
         if pygame.time.get_ticks() <= self.reloadTime:
             return
         self.reloadTime = pygame.time.get_ticks() + 700
         self.level.playerMissiles.append(\
             PlayerMissile(self.rect.centerx, self.rect.centery, \
-                            self.shoot[0], self.shoot[1]))
+                            self.dir[0], self.dir[1]))
         playStereo(self.shootSnd, self.rect.centerx)
     #enddef
 
@@ -243,18 +253,55 @@ class Player(BaseObj):
         if self.controls.fire:
             self.fire()
         #endif
+        movePressed = False
+        angle = 0
         if self.controls.left:
-            self.speed[0] -= 1
-            self.vizor[0] -= 2
-        if self.controls.right:
-            self.speed[0] += 1
-            self.vizor[0] += 2
-        if self.controls.up:
-            self.speed[1] -= 1
-            self.vizor[1] -= 2
-        if self.controls.down:
-            self.speed[1] += 1
-            self.vizor[1] += 2
+            movePressed = True
+            angle = math.pi
+            if self.controls.up: angle += math.pi/4
+            elif self.controls.down: angle -= math.pi/4
+        elif self.controls.right:
+            movePressed = True
+            angle = 0
+            if self.controls.up: angle = 2*math.pi - math.pi/4
+            elif self.controls.down: angle += math.pi/4
+        elif self.controls.up:
+            movePressed = True
+            angle = 3*math.pi/2
+            if self.controls.left: angle -= math.pi/4
+            elif self.controls.right: angle += math.pi/4
+        elif self.controls.down:
+            movePressed = True
+            angle = math.pi/2
+            if self.controls.left: angle += math.pi/4
+            elif self.controls.right: angle -= math.pi/4
+
+        if movePressed:
+            if abs(angle - self.angle)>math.pi/20:
+                a = angle - self.angle
+                if abs(a) > math.pi:
+                    angle = self.angle - sgn(a)*math.pi/8
+                else:
+                    angle = self.angle + sgn(a)*math.pi/8
+                if angle < 0: angle += 2*math.pi
+                elif angle > 2*math.pi: angle -= 2*math.pi
+
+                self.dir[0] = math.cos(angle)
+                self.dir[1] = math.sin(angle)
+                self.sprite = self.anims[1+sgn(int(self.dir[1]*3))][1+sgn(int(self.dir[0]*3))]
+                self.angle = angle
+
+            self.speed[0] += self.dir[0]
+            self.speed[1] += self.dir[1]
+            self.vizor[0] += self.dir[0]*2
+            self.vizor[1] += self.dir[1]*2
+
+            if randint(0,2):
+                self.level.playerMissiles.append(PlayerFlame( \
+                    self.rect.centerx-self.dir[0]*5, self.rect.centery-self.dir[1]*5))
+                playStereo(self.engineSnd, self.rect.centerx)
+        #endif
+
         self.speed[0] *= 0.9
         self.speed[1] *= 0.9
         self.vizor[0] *= 0.98
@@ -295,12 +342,29 @@ class PlayerMissile(BaseObj):
             self.energy = 0
         self.speed[0] *= 0.98
         self.speed[1] *= 0.98
-        if (math.fabs(self.speed[0]) < 5 and math.fabs(self.speed[1]) < 5) or self.energy <= 0:
+        if (abs(self.speed[0]) < 5 and abs(self.speed[1]) < 5) or self.energy <= 0:
             return False
         return BaseObj.behave(self)
     #enddef
 
 #endclass
+
+class PlayerFlame(BaseObj):
+    def __init__(self, x, y):
+        self.sprite = anim.Slot(data.images['flame'])
+        self.energy = 3
+        BaseObj.__init__(self, x+randint(-2,2), y+randint(-2,2), 'c')
+    #enddef
+
+    def behave(self):
+        if self.sprite.ended:
+            return False
+        return BaseObj.behave(self)
+    #enddef
+
+#endclass
+
+
 
 class DummyPlayer (BaseObj):
     def __init__(self, x, y):
