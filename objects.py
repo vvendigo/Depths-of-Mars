@@ -175,6 +175,12 @@ def sgn(x):
 
 
 class Player(BaseObj):
+    #static
+    dirs = ((1.0, 0.0), (0.7071, -0.7071),
+            (0.0, -1.0), (-0.7071, -0.7071),
+            (-1.0, 0.0), (-0.7071, 0.7071),
+            (0.0, 1.0), (0.7071, 0.7071))
+
     def __init__(self, x, y, controls):
         self.controls = controls
         self.anims = (
@@ -190,12 +196,11 @@ class Player(BaseObj):
         )
         self.sprite = self.anims[2][1]
         self.reloadTime = pygame.time.get_ticks()
-        self.shootSnd = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
-        self.engineSnd = pygame.mixer.Sound("snd/engine.wav")
+        self.shootSnd = data.sounds['shoot']
+        self.engineSnd = data.sounds['engine']
         self.speed = [0,0]
         self.vizor = [0,0]
-        self.dir = [0,1]
-        self.angle = math.pi/2
+        self.angle = 6
         self.energy = 100
         self.fuel = 100
         self.ammo = 100
@@ -209,7 +214,7 @@ class Player(BaseObj):
         self.reloadTime = pygame.time.get_ticks() + 700
         self.level.playerMissiles.append(\
             PlayerMissile(self.rect.centerx, self.rect.centery, \
-                            self.dir[0], self.dir[1]))
+                            self.dirs[self.angle][0], self.dirs[self.angle][1]))
         playStereo(self.shootSnd, self.rect.centerx)
     #enddef
 
@@ -253,52 +258,51 @@ class Player(BaseObj):
         if self.controls.fire:
             self.fire()
         #endif
-        movePressed = False
-        angle = 0
+        # keys
+        angle = None
         if self.controls.left:
-            movePressed = True
-            angle = math.pi
-            if self.controls.up: angle += math.pi/4
-            elif self.controls.down: angle -= math.pi/4
+            angle = 4
+            if self.controls.up: angle -= 1
+            elif self.controls.down: angle += 1
         elif self.controls.right:
-            movePressed = True
             angle = 0
-            if self.controls.up: angle = 2*math.pi - math.pi/4
-            elif self.controls.down: angle += math.pi/4
+            if self.controls.up: angle += 1
+            elif self.controls.down: angle = len(self.dirs)-1
         elif self.controls.up:
-            movePressed = True
-            angle = 3*math.pi/2
-            if self.controls.left: angle -= math.pi/4
-            elif self.controls.right: angle += math.pi/4
+            angle = 2
+            if self.controls.left: angle += 1
+            elif self.controls.right: angle -= 1
         elif self.controls.down:
-            movePressed = True
-            angle = math.pi/2
-            if self.controls.left: angle += math.pi/4
-            elif self.controls.right: angle -= math.pi/4
+            angle = 6
+            if self.controls.left: angle -= 1
+            elif self.controls.right: angle += 1
 
-        if movePressed:
-            if abs(angle - self.angle)>math.pi/20:
+        if angle != None:
+            if angle - self.angle != 0:
                 a = angle - self.angle
-                if abs(a) > math.pi:
-                    angle = self.angle - sgn(a)*math.pi/8
+                if abs(a) >= len(self.dirs)/2:
+                    angle = self.angle - sgn(a)
                 else:
-                    angle = self.angle + sgn(a)*math.pi/8
-                if angle < 0: angle += 2*math.pi
-                elif angle > 2*math.pi: angle -= 2*math.pi
+                    angle = self.angle + sgn(a)
+                if angle < 0: angle += len(self.dirs)
+                elif angle >= len(self.dirs): angle -= len(self.dirs)
 
-                self.dir[0] = math.cos(angle)
-                self.dir[1] = math.sin(angle)
-                self.sprite = self.anims[1+sgn(int(self.dir[1]*3))][1+sgn(int(self.dir[0]*3))]
+                self.sprite = self.anims\
+                                [1+sgn(self.dirs[angle][1])]\
+                                [1+sgn(self.dirs[angle][0])]
                 self.angle = angle
+            #endif
 
-            self.speed[0] += self.dir[0]
-            self.speed[1] += self.dir[1]
-            self.vizor[0] += self.dir[0]*2
-            self.vizor[1] += self.dir[1]*2
+            dir = self.dirs[self.angle]
+            self.speed[0] += dir[0]
+            self.speed[1] += dir[1]
+            self.vizor[0] += dir[0]*2
+            self.vizor[1] += dir[1]*2
 
             if randint(0,2):
                 self.level.playerMissiles.append(PlayerFlame( \
-                    self.rect.centerx-self.dir[0]*5, self.rect.centery-self.dir[1]*5))
+                    self.rect.centerx-dir[0]*5,\
+                    self.rect.centery-dir[1]*5))
                 playStereo(self.engineSnd, self.rect.centerx)
         #endif
 

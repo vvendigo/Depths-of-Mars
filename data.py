@@ -15,6 +15,8 @@ images = None
 mnuFont1 = None
 mnuFont2 = None
 
+sounds = None
+
 def writeMsg(msg):
     global screenY, screenX
     screenY += core.font.get_height()
@@ -36,7 +38,7 @@ def writeProgress(no, of):
 #enddef
 
 def init():
-    global images, mnuFont1, mnuFont2
+    global images, mnuFont1, mnuFont2, sounds
 
     writeMsg("Initializing data:")
 
@@ -49,4 +51,10 @@ def init():
     mnuFont1 = pygame.font.Font(pygame.font.get_default_font(), 30)
     mnuFont2 = pygame.font.Font(pygame.font.get_default_font(), 50)
     mnuFont2.set_bold(True)
+
+    writeMsg("Loading sounds...")
+    sounds = {}
+    sounds['shoot'] = pygame.mixer.Sound("snd/31855__HardPCM__Chip015.wav")
+    sounds['engine'] = pygame.mixer.Sound("snd/engine.wav")
+
 #enddef
