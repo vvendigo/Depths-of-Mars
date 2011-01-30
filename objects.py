@@ -280,7 +280,9 @@ class Player(BaseObj):
         if angle != None:
             if angle - self.angle != 0:
                 a = angle - self.angle
-                if abs(a) >= len(self.dirs)/2:
+                if abs(a) == len(self.dirs)/2:
+                    angle = self.angle - 1
+                elif abs(a) > len(self.dirs)/2:
                     angle = self.angle - sgn(a)
                 else:
                     angle = self.angle + sgn(a)
