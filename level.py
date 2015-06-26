@@ -160,7 +160,7 @@ class Level:
             row = []
             for x in xrange(0, len(lvlData[y])):
                 patt = ''
-                if y-1 >= 0 and lvlData[y-1][x]:
+                if y-1 >= 0 and x < len(lvlData[y-1]) and lvlData[y-1][x]:
                     patt += '1'
                 else:
                     patt += '0'
@@ -253,7 +253,7 @@ class Level:
             return False
         x = int(x/core.tileSize)
         y = int(y/core.tileSize)
-        if x>len(self.walls[y]):
+        if x>=len(self.walls[y]):
             return False
         return self.walls[y][x].impassable
     #enddef

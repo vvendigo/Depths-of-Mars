@@ -9,13 +9,16 @@ TODO:
 - new alien classes
   - steam beam
   - alien brooder
+  - turret
+  - brain
 - better sprites
 - paralax scrolling bg???
 - improve alien motion (pathfinding?)
 - path evaluation could be used in level generation? (alien positioning)
-- change player motion and shooting
+- weapon class/es
 
 DONE:
+- change player motion
 - graphics rewritten using asciiart lib
 - animated sprites
 - player x monster collisions
