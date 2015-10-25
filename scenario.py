@@ -2,6 +2,8 @@ import pygame
 import core
 from level import Level
 from menu import Menu
+import anim
+import data
 
 class Scenario:
     level = 0
@@ -12,10 +14,14 @@ class Scenario:
 
     def __init__(self):
         menu = Menu()
-        menu.set(0, 'New Game', self.newGame)
-        menu.set(1, 'Random Level 1', self.randomLevel1)
-        menu.set(2, 'Random Level 2', self.randomLevel2)
-        menu.set(4, 'Quit', self.end )
+        menu.set(0, anim.Slot(data.images['menu_newgame']), \
+                    anim.Slot(data.images['menu_newgame_act']), self.newGame)
+        menu.set(1, anim.Slot(data.images['menu_random']), \
+                    anim.Slot(data.images['menu_random_act']), self.randomLevel1)
+        menu.set(2, anim.Slot(data.images['menu_random']), \
+                    anim.Slot(data.images['menu_random_act']), self.randomLevel2)
+        menu.set(4, anim.Slot(data.images['menu_quit']), \
+                    anim.Slot(data.images['menu_quit_act']), self.end )
         self.menu = menu
 
         self.levels.append((0, 0, Level(0)))

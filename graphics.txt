@@ -4,6 +4,73 @@
 
 @duration 10
 
+@name menu_newgame
+ r   r   rrr   r  r r     rrrr  rrr    rr r    rrr
+rRr rRr rRRRr rRrrRrRr   rRRRRrrRRRr  rRRrRr  rRRRr
+rRRrrRrrRrrrRrrRrrRrRr  rRrrrr  rrrRrrRrrRrRrrRrrrRr
+rRrRrRrrRRRRRrrRrrRrRr  rRrRRRrrRRRRrrRrrRrRrrRRRRRr
+rRrrRRrrRrrrr rRrrRrRr  rRrrrRrrRrrRrrRrrRrRrrRrrrr
+rRr rRr rRRRr  rRRrRr    rRRRr  rRRRrrRrrRrRr rRRRr
+ r   r   rrr    rr r      rrr    rrr  r  r r   rrr
+@end
+
+@name menu_newgame_act
+ RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+R r   r   rrr   r  r r     rrrr  rrr    rr r    rrr  R
+RrRr rRr rRRRr rRrrRrRr   rRRRRrrRRRr  rRRrRr  rRRRr R
+RrRRrrRrrRrrrRrrRrrRrRr  rRrrrr  rrrRrrRrrRrRrrRrrrRrR
+RrRrRrRrrRRRRRrrRrrRrRr  rRrRRRrrRRRRrrRrrRrRrrRRRRRrR
+RrRrrRRrrRrrrr rRrrRrRr  rRrrrRrrRrrRrrRrrRrRrrRrrrr R
+RrRr rRr rRRRr  rRRrRr    rRRRr  rRRRrrRrrRrRr rRRRr R
+R r   r   rrr    rr r      rrr    rrr  r  r r   rrr  R
+ RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+@end
+
+@name menu_random
+ rrrr   rrr   r   r     r   rr    rr r
+rRRRRr rRRRr rRr rRr   rRr rRRr  rRRrRr
+rRrrrRr rrrRrrRRrrRr rRRRrrRrrRrrRrrRrRr
+rRRRRRrrRRRRrrRrRrRrrRrrRrrRrrRrrRrrRrRr
+rRrrRr rRrrRrrRrrRRrrRrrRrrRrrRrrRrrRrRr
+rRr rRr rRRRrrRr rRrrRRRRr rRRr rRrrRrRr
+ r   r   rrr  r   r  rrrr   rr   r  r r
+@end
+
+@name menu_random_act
+ RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+R rrrr   rrr   r   r     r   rr    rr r  R
+RrRRRRr rRRRr rRr rRr   rRr rRRr  rRRrRr R
+RrRrrrRr rrrRrrRRrrRr rRRRrrRrrRrrRrrRrRrR
+RrRRRRRrrRRRRrrRrRrRrrRrrRrrRrrRrrRrrRrRrR
+RrRrrRr rRrrRrrRrrRRrrRrrRrrRrrRrrRrrRrRrR
+RrRr rRr rRRRrrRr rRrrRRRRr rRRr rRrrRrRrR
+R r   r   rrr  r   r  rrrr   rr   r  r r R
+ RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+@end
+
+@name menu_quit
+  rrr   r  r  r rrrrr
+ rRRR  rRrrRrrRrRRRRRr
+rRrrrR rRrrRrrRrrrRrr
+rRrRrR rRrrRrrRr rRr
+rRrrRr rRrrRrrRr rRr
+ rRRrRr rRRr rRr rRr
+  rr r   rr   r   r
+@end
+
+@name menu_quit_act
+ RRRRRRRRRRRRRRRRRRRRRR
+R  rrr   r  r  r rrrrr R
+R rRRR  rRrrRrrRrRRRRRrR
+RrRrrrR rRrrRrrRrrrRrr R
+RrRrRrR rRrrRrrRr rRr  R
+RrRrrRr rRrrRrrRr rRr  R
+R rRRrRr rRRr rRr rRr  R
+R  rr r   rr   r   r   R
+ RRRRRRRRRRRRRRRRRRRRRR
+@end
+
+
 @name border1000
 dddddddddd
 @end

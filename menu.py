@@ -22,12 +22,16 @@ class Menu:
             if (i == self.active):
                 sf = e[1]
             r = sf.get_rect()
-            core.screen.blit(sf, ((core.width-r.width)/2, y))
+            sf.draw(core.screen, (core.width-r.width)/2, y)
             y += r.height + self.spanSpace
         #endfor
     #enddef
 
     def behave(self):
+        for opt in self.opts:
+            if opt[0] != None:
+                opt[0].behave()
+                opt[1].behave()
         dir = 0
         if core.controls.down:
             dir = +1
@@ -50,15 +54,12 @@ class Menu:
         #endif
     # enddef
 
-    def set(self, no, text, callback = None):
+    def set(self, no, entry, selectedEntry, callback = None):
         if len(self.opts) <= no:
             addLen = 1+no-len(self.opts)
             self.opts += [(None, )]*(addLen)
             self.height += (addLen - 1) * self.skipSpace
-        self.opts[no] = \
-            ( data.mnuFont1.render(text, True, (225,60,20)).convert_alpha(), \
-              data.mnuFont2.render(text, True, (225,60,20)).convert_alpha(), \
-              callback )
+        self.opts[no] = (entry, selectedEntry, callback )
         self.height += self.opts[no][0].get_rect().height
     #enddef
 #endclass
